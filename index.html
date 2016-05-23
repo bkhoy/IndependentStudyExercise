@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+	<head>
+		<meta charset="UTF-8">
+
+		<title>Independent Study Exercise</title>
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+
+	</head>
+
+	<body>
+		<header>
+			<h1>Display my Google Drive</h1>
+		</header>
+
+		<main class="container">
+			<div class="jumbotron">
+				<p>Where is the information you would like to work with?</p>
+				<div id='buttons'>
+					<button class="btn btn-default" id="gdriveButton">Google Drive</button>
+				</div>
+			</div>
+			<div id="toolbar">
+				<h3></h3>
+				<div id="button-toolbar" class="btn-group" role="group" aria-label="navigation toolbar">
+				</div>
+			</div>
+			<div id="groupingItems"></div>
+			<div id="nonGroupingItems"></div>
+		</main>
+
+
+	    <!-- jQuery library -->
+	    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+		<!-- External links with Google Drive-->
+		<script src="https://apis.google.com/js/client.js"></script>
+
+		<!-- ItemMirror js connection -->
+		<script src="js/item-mirror.js"></script>
+		<script src="js/main.js"></script>
+	</body>
+
+</html>
