@@ -70,8 +70,9 @@ function refreshIMDisplay () {
 }
 
 function printAssociations (associationList, div) {
-  console.log('ASSOCIATIONS:')
-  createCanvas()
+
+  //creates the jCanvas
+  $('#content').html("<canvas id='myCanvas' width = '600' height= '600'></canvas>")
   associationList.map(function(assoc) {
 		var guid = assoc
     var displayText = im.getAssociationDisplayText(guid);
@@ -80,16 +81,18 @@ function printAssociations (associationList, div) {
     // $('.output').append(html);
     if (x > 600) {
     	x = 0;
-    	y += 100;
+    	y += 50;
     }
-    
+
     $('#myCanvas').drawImage({
 			source: 'http://3.bp.blogspot.com/_4ngpCZv0sNo/SiwO7f3LdzI/AAAAAAAAB5U/yobvWk1nrhg/s400/g7719.png',
-		  x: x += 100, y: y,
-		  width: 100,
-		  height: 100,
-		  fromCenter: false
+		  x: x += 50, y: y,
+		  width: 50,
+		  height: 50,
+		  fromCenter: false,
+		  draggable: true,
 		});
+
     // console.log(assoc)
     // console.log(im.getAssociationDisplayText(assoc))
   })
@@ -97,9 +100,6 @@ function printAssociations (associationList, div) {
 
 }
 
-function createCanvas() {
-	$('#content').html("<canvas id='myCanvas' width = '600' height= '600'></canvas>")
-}
 
 function createClickHandlers () {
    $('img').click(function() {
