@@ -1,5 +1,7 @@
 
 var googAuth
+var x = 0;
+var y = 0;
 
 var im,
   store,
@@ -64,20 +66,46 @@ function refreshIMDisplay () {
   }
 
   printAssociations(im.listAssociations())
+  createClickHandlers()
 }
 
 function printAssociations (associationList, div) {
   console.log('ASSOCIATIONS:')
+  createCanvas()
   associationList.map(function(assoc) {
 		var guid = assoc
     var displayText = im.getAssociationDisplayText(guid);
-    var html = "<div im-guid='" + guid + "' class='association>'<p>" + displayText + "</p></div>";
-    $('.output').append(html);
+    // var html = "<div im-guid='" + guid + "' class='association'><img id='icon' src='http://orig02.deviantart.net/f88f/f/2014/053/d/f/pig50x50_1_by_riverkpocc-d77n3fq.gif' alt='default_bg'/><p class='listText'>" + displayText + "</p></div>";
+    // $('.listText').css('display', 'inline')
+    // $('.output').append(html);
+    if (x > 600) {
+    	x = 0;
+    	y += 100;
+    }
+    
+    $('#myCanvas').drawImage({
+			source: 'http://3.bp.blogspot.com/_4ngpCZv0sNo/SiwO7f3LdzI/AAAAAAAAB5U/yobvWk1nrhg/s400/g7719.png',
+		  x: x += 100, y: y,
+		  width: 100,
+		  height: 100,
+		  fromCenter: false
+		});
     // console.log(assoc)
     // console.log(im.getAssociationDisplayText(assoc))
   })
+
+
 }
 
+function createCanvas() {
+	$('#content').html("<canvas id='myCanvas' width = '600' height= '600'></canvas>")
+}
+
+function createClickHandlers () {
+   $('img').click(function() {
+				$(this).css('background-color', 'red')
+	})
+}
 
 // Refreshes the itemMirror object
 function refreshMirror () {
@@ -135,7 +163,7 @@ $('#gdriveButton').click(function () {
         })
       }
     })
-  }, 1000)
+  }, 500)
 })
 
 // Loads the drive API, and resolves the promise
