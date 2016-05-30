@@ -235,7 +235,6 @@ function authorizeDrive (next) {
 
     next(gapi.auth2.getAuthInstance())
   })
-<<<<<<< HEAD
 }
 
 
