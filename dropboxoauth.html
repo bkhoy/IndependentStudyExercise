@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- // Make sure to load the correct path to wherever your dropbox script is! -->
+    <script src="js/dropbox.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    // This command deals with the popup logic
+    Dropbox.AuthDriver.Popup.oauthReceiver();
+    </script>
+  </head>
+  <body>
+    <!-- // A simple success message to the user -->
+    <h1>Dropbox sign-in successful</h1>
+    <p>Please close this window.</p>
+  </body>
+</html>

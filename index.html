@@ -13,7 +13,7 @@
 
 	<body>
 		<header>
-			<h1>Display my Google Drive in terms of PENGUINS</h1>
+			<h1 style="text-align: center;">Display my Google Drive in terms of PENGUINS</h1>
 		</header>
 
 		<main class="container">
@@ -21,6 +21,7 @@
 				<p>Where is the information you would like to work with?</p>
 				<div id='buttons'>
 					<button class="btn btn-default" id="gdriveButton">Google Drive</button>
+					<button class="btn btn-default" id="dboxButton">Dropbox</button>
 				</div>
 			</div>
 			<div id="toolbar">
@@ -28,7 +29,11 @@
 				<div id="button-toolbar" class="btn-group" role="group" aria-label="navigation toolbar">
 				</div>
 			</div>
-			<div id="content">
+			<div>
+				<div id="navbuttons"></div>
+				<h4 id="itemname"></h4>
+			</div>
+			<div id="content" style="overflow: auto; width: 800;">
 			</div>
 		</main>
 
@@ -38,6 +43,7 @@
 
 		<!-- External links with Google Drive-->
 		<script src="https://apis.google.com/js/client.js"></script>
+		<script src="js/dropbox.min.js"></script>
 
 		<!--jCanvas (jquery + canvas) -->
 		<script src="js/jcanvas.min.js"></script>
@@ -46,6 +52,7 @@
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 		<!-- ItemMirror js connection -->
+		<script src="js/dropbox-item-mirror.js"></script>
 		<script src="js/item-mirror.js"></script>
 		<script src="js/main.js"></script>
 	</body>

@@ -1,5 +1,5 @@
 
-var googAuth
+var googAuth;
 var x = 0;
 var y = 0;
 
@@ -9,9 +9,10 @@ var im,
   previous,
   associations,
   dropboxClientCredentials,
-  selectedAssociation
+  dropboxClient,
+  selectedAssociation;
 
-var authenticatedClient = null
+var authenticatedClient = null;
 
 function getClient () {
   return authenticatedClient
@@ -24,7 +25,6 @@ function constructIMObject (store) {
       console.log(error)
     } else {
       im = newMirror
-
       // Check to see which of the returned items is the correct store, and navigate into that mirror
       if (store) {
         associations = im.listAssociations()
@@ -71,35 +71,56 @@ function refreshIMDisplay () {
 
 function printAssociations (associationList, div) {
 
+  $('#navbuttons').html("<button class='btn btn-success' onclick='x=0;y=0;navigateRoot();'>root</button>")
+
   //creates the jCanvas
-  $('#content').html("<canvas id='myCanvas' width = '600' height= '600'></canvas>")
+  $('#content').html("<canvas id='myCanvas' width = '2000' height= '400' style='border:1px solid #000000;'></canvas>")
   associationList.map(function(assoc) {
 		var guid = assoc
     var displayText = im.getAssociationDisplayText(guid);
     // var html = "<div im-guid='" + guid + "' class='association'><img id='icon' src='http://orig02.deviantart.net/f88f/f/2014/053/d/f/pig50x50_1_by_riverkpocc-d77n3fq.gif' alt='default_bg'/><p class='listText'>" + displayText + "</p></div>";
     // $('.listText').css('display', 'inline')
     // $('.output').append(html);
-    if (x > 600) {
+    if (x > 630) {
     	x = 0;
-    	y += 50;
-    }
-
+    	y += 62;
+    } 
+    $("#itemname").text("Item Name:");
     $('#myCanvas').drawImage({
 			source: 'http://3.bp.blogspot.com/_4ngpCZv0sNo/SiwO7f3LdzI/AAAAAAAAB5U/yobvWk1nrhg/s400/g7719.png',
-		  x: x += 50, y: y,
+		  x: x += 70, y: y,
 		  width: 50,
 		  height: 50,
 		  fromCenter: false,
 		  draggable: true,
-		});
+      groups: [displayText],
+      dragGroups: [displayText],
+      mouseover: function(){
+                  $("#itemname").text("Item Name: " + displayText);
+                },
+      dblclick: function(){
+                  x = 0;
+                  y = 0;
+                  navigateMirror(guid);
+                }
+		}).drawText({
+      fillStyle: '#000000',
+      x: x+25, y: y+56,
+      fontSize: 12,
+      fontFamily: 'Verdana, sans-serif',
+      text: displayText,
+      draggable: true,
+      groups: [displayText],
+      dragGroups: [displayText],
+    });;
+
+    //console.log(im.hasAssociationNamespace (assoc,));
+
 
     // console.log(assoc)
     // console.log(im.getAssociationDisplayText(assoc))
   })
-
-
 }
-
 
 function createClickHandlers () {
    $('img').click(function() {
@@ -120,6 +141,9 @@ function refreshMirror () {
 function navigateMirror (guid) {
   im.createItemMirrorForAssociatedGroupingItem(guid, function (error, newMirror) {
     if (!error) {
+      if(!rootMirror){
+        rootMirror = newMirror;
+      }
       im = newMirror
       refreshIMDisplay()
     } else {
@@ -127,7 +151,6 @@ function navigateMirror (guid) {
     }
   })
 }
-
 
 // Navigates to the root mirror
 function navigateRoot () {
@@ -206,3 +229,57 @@ function authorizeDrive (next) {
     next(gapi.auth2.getAuthInstance())
   })
 }
+
+
+function setDropbox(){
+  dropboxClientCredentials = {
+    key: 'ktpwfv4uaokjmcl',
+    secret: 'y6emzhgg3vkz12h'
+  };
+
+  // Make an new instance of a Dropbox Client with our credentials
+  dropboxClient = new Dropbox.Client(dropboxClientCredentials);
+
+  // Tell the client to open up our popup on authentication
+  dropboxClient.authDriver(new Dropbox.AuthDriver.Popup({
+      receiverUrl: 'http://localhost:8080/dropboxoauth.html'
+  }));
+}
+
+// Dropbox Auth
+$('#dboxButton').click(function () {
+  setDropbox();
+  setTimeout(function () {
+    $('#dboxButton').remove()
+    $('#buttons').append("<button class='btn btn-primary' id='dSignInButton'>Sign in to Dropbox</button>")
+    $('#dSignInButton').click(function () {
+      console.log('Checking Auth')
+      store = "Dropbox";
+      // If there is already an authenticated client, don't try to authenticate again
+      if(dropboxClient.isAuthenticated()) {
+          console.log('Dropbox authenticated');
+      } else {
+          console.log('Dropbox authenticating...');
+          dropboxClient.authenticate(function (error, client) {
+              // If an error occurs in authentication, log it
+              if(error) {
+                  console.log('Dropbox failed to authenticate');
+              } else {
+                  // Set global variable to authenticated client
+                  authenticatedClient = client;
+                  console.log('Dropbox authenticated');
+                  console.log(store);
+                  // Construct the root itemMirror object (more on this in next section)
+                  constructIMObject(store);
+              }
+          });
+      }
+    })
+  }, 500)
+})
+
+// Signs current client out of Dropbox
+function disconnectDropbox() {
+    dropboxClient.signOut();
+}
+
